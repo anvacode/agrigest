@@ -55,6 +55,7 @@ export class RegisterComponent {
         this.isLoading = false;
         console.error('Error completo:', err);
         this.handleError(err);
+        console.error('Detalles del error:', err.error);
       }
     });
   }

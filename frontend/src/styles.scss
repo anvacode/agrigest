@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&display=swap');
-
+// Importar fuentes de Google Fonts
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/open-sans/400.css';
+@import '@fontsource/open-sans/600.css';
 /* Variables globales */
 :root {
   --primary-color: #4CAF50; /* Verde agrícola */

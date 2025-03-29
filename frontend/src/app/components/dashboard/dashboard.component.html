@@ -1,0 +1,45 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Panel de Gestión Agrícola</h1>
+    <button routerLink="/farms/new" class="btn-add-farm">
+      <i class="fas fa-plus"></i> Nueva Finca
+    </button>
+  </header>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i> Cargando datos...
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="summary-cards">
+    <div class="summary-card">
+      <h3>Total Fincas</h3>
+      <p>{{ farms.length }}</p>
+    </div>
+    <div class="summary-card">
+      <h3>Área Total</h3>
+      <p>{{ calculateTotalArea() }} hectáreas</p>
+    </div>
+    <div class="summary-card">
+      <h3>Próximas Actividades</h3>
+      <p>3 pendientes</p>
+    </div>
+  </div>
+
+  <section class="farms-section">
+    <h2>Tus Fincas</h2>
+    <div class="farms-grid">
+      <div *ngFor="let farm of farms" class="farm-card" routerLink="/farms/{{farm.id}}">
+        <h3>{{ farm.name }}</h3>
+        <p><i class="fas fa-map-marker-alt"></i> {{ farm.location }}</p>
+        <p><i class="fas fa-arrows-alt"></i> {{ farm.size }} hectáreas</p>
+        <div class="crops-tags">
+          <span *ngFor="let crop of farm.crops" class="crop-tag">{{ crop }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
