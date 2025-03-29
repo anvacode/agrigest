@@ -216,3 +216,19 @@
     text-align: center;
   }
 }
+
+.horizontal-nav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.horizontal-nav .nav-item {
+  margin-right: 15px;
+}
+
+.horizontal-nav .nav-item:last-child {
+  margin-right: 0;
+}
