@@ -1,0 +1,14 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Backend
+backend/node_modules/
+
+# Archivos de entorno
+.env
+*.env
+
+# Configuraciones
+*.log
+.DS_Store
