@@ -1,0 +1,41 @@
+<div class="home-container">
+  <header class="header">
+    <div class="logo">AgroApp</div>
+    <nav class="nav">
+      <a routerLink="/dashboard" class="nav-link">Dashboard</a>
+      <a routerLink="/profile" class="nav-link">Perfil</a>
+      <button class="logout-button" (click)="logout()">Cerrar sesión</button>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="hero">
+      <h1 class="hero-title">Bienvenido, {{ user?.name || 'Usuario' }}!</h1>
+      <p class="hero-subtitle">Gestión agrícola inteligente</p>
+      
+      <div class="cta-buttons">
+        <a routerLink="/dashboard" class="cta-button primary">Ver dashboard</a>
+        <a routerLink="/profile" class="cta-button secondary">Mi perfil</a>
+      </div>
+    </section>
+
+    <section class="quick-stats">
+      <div class="stat-card">
+        <h3>Actividad reciente</h3>
+        <p class="stat-value">5</p>
+      </div>
+      <div class="stat-card">
+        <h3>Notificaciones</h3>
+        <p class="stat-value">2</p>
+      </div>
+      <div class="stat-card">
+        <h3>Estado</h3>
+        <p class="stat-value">Activo</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2023 AgroApp - Todos los derechos reservados</p>
+  </footer>
+</div>

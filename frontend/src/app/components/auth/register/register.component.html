@@ -1,0 +1,105 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Registro de Agricultor</h2>
+    
+    <form #registerForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="form-columns">
+        <!-- Columna izquierda - Datos personales -->
+        <div class="form-section personal-data">
+          <h3 style="color: #2E7D32; border-bottom: 2px solid #4CAF50;">Datos Personales</h3>
+          
+          <div class="form-field">
+            <label for="name" style="color: #2E7D32;">Nombre completo</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              [(ngModel)]="userData.name" 
+              required
+              placeholder="Nombre completo">
+          </div>
+
+          <div class="form-field">
+            <label for="email" style="color: #2E7D32;">Correo electrónico</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              [(ngModel)]="userData.email" 
+              required
+              placeholder="ejemplo@correo.com">
+          </div>
+
+          <div class="form-field">
+            <label for="password" style="color: #2E7D32;">Contraseña</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              [(ngModel)]="userData.password" 
+              required
+              minlength="8"
+              placeholder="Mínimo 8 caracteres">
+          </div>
+        </div>
+
+        <!-- Columna derecha - Datos de la finca -->
+        <div class="form-section farm-data">
+          <h3 style="color: #2E7D32; border-bottom: 2px solid #4CAF50;">Datos de la Finca</h3>
+          
+          <div class="form-field">
+            <label for="farmName" style="color: #2E7D32;">Nombre de la finca</label>
+            <input 
+              type="text" 
+              id="farmName" 
+              name="farmName" 
+              [(ngModel)]="userData.farm.name" 
+              required
+              placeholder="Nombre de la finca">
+          </div>
+
+          <div class="form-field">
+            <label for="location" style="color: #2E7D32;">Ubicación</label>
+            <input 
+              type="text" 
+              id="location" 
+              name="location" 
+              [(ngModel)]="userData.farm.location" 
+              required
+              placeholder="Ciudad, región">
+          </div>
+
+          <div class="form-field">
+            <label for="size" style="color: #2E7D32;">Tamaño (hectáreas)</label>
+            <input 
+              type="number" 
+              id="size" 
+              name="size" 
+              [(ngModel)]="userData.farm.size" 
+              required
+              min="0"
+              placeholder="Tamaño en hectáreas">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-footer">
+        <button 
+          type="submit" 
+          class="register-button"
+          [disabled]="registerForm.invalid"
+          style="background-color: #4CAF50; color: white;">
+          Registrarse
+        </button>
+
+        <div class="login-link">
+          ¿Ya tienes una cuenta? <a routerLink="/login" style="color: #2E7D32; font-weight: 500;">Inicia sesión</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

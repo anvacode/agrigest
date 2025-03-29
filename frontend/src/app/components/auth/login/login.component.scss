@@ -1,0 +1,353 @@
+.welcome-container {
+  display: flex;
+  min-height: calc(100vh - 70px);
+  background-color: #f8f9fa;
+}
+
+.login-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9f5eb 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 3rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  
+  h2 {
+    color: #2E7D32;
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+  
+  .subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #fafafa;
+      
+      &::placeholder {
+        color: #aaa;
+      }
+      
+      &:focus {
+        outline: none;
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        background-color: white;
+      }
+    }
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    height: 48px;
+    
+    &:hover {
+      background-color: #388E3C;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 142, 60, 0.2);
+    }
+    
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  
+  a {
+    color: #4CAF50;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .forgot-password {
+    display: block;
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+.info-section {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+  }
+}
+
+.info-card {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+  
+  h1 {
+    font-size: 2.3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+    font-weight: 700;
+  }
+  
+  .lead {
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+}
+
+.divider {
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 2.5rem 0;
+}
+
+.divider-light {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 1.5rem 0;
+}
+
+.features {
+  margin-bottom: 3rem;
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    gap: 1.5rem;
+    
+    .feature-icon {
+      font-size: 2rem;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+    
+    .feature-text {
+      h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.3rem;
+        font-weight: 600;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 0.95rem;
+        opacity: 0.8;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+.stats-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.8rem;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .project-badge {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+  
+  h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+  }
+}
+
+.cost-table {
+  .cost-header {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 500;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+  
+  .cost-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .welcome-container {
+    flex-direction: column;
+  }
+  
+  .login-section, .info-section {
+    padding: 2rem 1.5rem;
+    width: 100%;
+  }
+  
+  .info-section {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+  
+  .login-card {
+    padding: 2rem;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 576px) {
+  .info-card h1 {
+    font-size: 1.8rem;
+  }
+  
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem !important;
+    
+    .feature-icon {
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  .cost-table {
+    .cost-header, .cost-row {
+      grid-template-columns: 1fr 1fr;
+      
+      span:last-child {
+        display: none;
+      }
+    }
+  }
+}

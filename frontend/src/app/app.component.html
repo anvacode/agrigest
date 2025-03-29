@@ -1,0 +1,84 @@
+<header class="header">
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="https://agrigestsrl.com/wp-content/uploads/2020/11/agrigest-80.png" 
+           alt="AgriGest Logo" 
+           class="logo">
+    </div>
+    
+    <ul class="nav-links">
+      @if (user) {
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar sesión</span>
+          </a>
+        </li>
+      } @else {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Iniciar sesión</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/register" routerLinkActive="active">
+            <i class="fas fa-user-plus"></i>
+            <span>Registrarse</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</header>
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="main-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <img src="https://agrigestsrl.com/wp-content/uploads/2020/11/agrigest-80.png" 
+           alt="AgriGest Logo" 
+           class="footer-logo">
+      <p class="footer-slogan">Transformando la agricultura con tecnología</p>
+    </div>
+    
+    <div class="footer-links">
+      <div class="link-group">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a routerLink="/">Inicio</a></li>
+          <li><a routerLink="/features">Funcionalidades</a></li>
+          <li><a routerLink="/pricing">Planes</a></li>
+        </ul>
+      </div>
+      
+      <div class="link-group">
+        <h4>Legal</h4>
+        <ul>
+          <li><a routerLink="/privacy">Política de Privacidad</a></li>
+          <li><a routerLink="/terms">Términos de Servicio</a></li>
+        </ul>
+      </div>
+      
+      <div class="link-group">
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:info&#64;agrigest.com">info&#64;agrigest.com</a></li>
+          <li><a href="tel:+123456789">+1 234 567 89</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} AgriGest. Todos los derechos reservados.</p>
+    <div class="social-links">
+      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+</footer>

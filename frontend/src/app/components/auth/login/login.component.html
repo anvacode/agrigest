@@ -1,0 +1,68 @@
+<div class="welcome-container">
+  <div class="login-section">
+    <div class="login-card fade-in">
+      <h2>Bienvenido de vuelta</h2>
+      <p class="subtitle">Ingresa tus credenciales para acceder a tu cuenta</p>
+      
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="login-form">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" [(ngModel)]="credentials.email" required
+                 placeholder="tucorreo@ejemplo.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" [(ngModel)]="credentials.password" required
+                 placeholder="••••••••">
+        </div>
+        
+        <button type="submit" [disabled]="!loginForm.valid" class="login-btn">
+          @if (isLoading) {
+            <span class="spinner"></span>
+          } @else {
+            Iniciar sesión
+          }
+        </button>
+        
+        <div class="login-footer">
+          <p>¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+          <a routerLink="/forgot-password" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="info-section">
+    <div class="info-card">
+      <h1>Transforma tu gestión agrícola</h1>
+      <p class="lead">AgriGest te ayuda a optimizar tus cultivos con tecnología moderna y fácil de usar.</p>
+      
+      <div class="divider"></div>
+      
+      <div class="features">
+        <div class="feature-item">
+          <div class="feature-icon">🌾</div>
+          <div class="feature-text">
+            <h3>+500 agricultores</h3>
+            <p>Confían en nuestra plataforma</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text">
+            <h3>Control total</h3>
+            <p>De tus costos y producción</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⏱️</div>
+          <div class="feature-text">
+            <h3>Ahorra tiempo</h3>
+            <p>Con gestión automatizada</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
