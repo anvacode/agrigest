@@ -1,9 +1,11 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <h1>Panel de Gestión Agrícola</h1>
-    <button routerLink="/farms/new" class="btn-add-farm">
-      <i class="fas fa-plus"></i> Nueva Finca
-    </button>
+    <div class="header-actions">
+      <button routerLink="/farms/new" class="btn-add-farm">
+        <i class="fas fa-plus"></i> Nueva Finca
+      </button>
+    </div>
   </header>
 
   <div *ngIf="loading" class="loading-spinner">

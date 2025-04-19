@@ -20,5 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
     canActivate: [authGuard]
   },
+  { 
+    path: 'farms/new', // Nueva ruta para el CRUD
+    loadComponent: () => import('./components/farm-crud/farm-crud.component').then(m => m.FarmCrudComponent),
+    canActivate: [authGuard] // Protege la ruta con el guard si es necesario
+  },
   { path: '**', redirectTo: '' }
 ];

@@ -15,14 +15,13 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'El email es requerido'],
-    unique: true,
+    unique: true, // Índice único
     trim: true,
     lowercase: true,
     validate: {
       validator: validator.isEmail,
       message: 'Por favor ingrese un email válido'
-    },
-    index: true // Mejora rendimiento en búsquedas
+    }
   },
   password: {
     type: String,
@@ -164,7 +163,6 @@ UserSchema.virtual('farmDetails', {
 });
 
 // Índices para mejorar rendimiento
-UserSchema.index({ email: 1 }); // Índice único ya está por unique: true
-UserSchema.index({ farm: 1 });
+UserSchema.index({ farm: 1 }); 
 
 module.exports = mongoose.model('User', UserSchema);

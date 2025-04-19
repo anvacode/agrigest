@@ -77,17 +77,22 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    
-    // Buscar usuario y validar
+
+    // Validar entrada (opcional si ya se usa validateRequest)
+    if (!email || !password) {
+      throw new HttpError(400, 'El correo electrónico y la contraseña son obligatorios.');
+    }
+
+    // Buscar usuario por correo electrónico
     const user = await User.findOne({ email }).select('+password').populate('farm');
     if (!user) {
-      throw new HttpError(401, 'Invalid credentials');
+      throw new HttpError(401, 'Credenciales inválidas.');
     }
 
     // Comparar contraseñas
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      throw new HttpError(401, 'Invalid credentials');
+      throw new HttpError(401, 'Credenciales inválidas.');
     }
 
     // Generar token
@@ -101,11 +106,15 @@ exports.login = async (req, res, next) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        farm: user.farm
-      }
+        farm: {
+          id: user.farm._id,
+          name: user.farm.name,
+          location: user.farm.location,
+        },
+      },
     });
-
   } catch (error) {
-    next(error);
+    console.error('Error en login:', error); // Registrar el error
+    next(error); // Pasar el error al middleware de manejo de errores
   }
 };

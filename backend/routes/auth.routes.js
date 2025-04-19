@@ -21,6 +21,12 @@ router.post(
   login
 );
 
+// Controlador para manejar las fincas
+const { createFarm } = require('../controllers/farm.controller');
+
+// Ruta para crear una nueva finca
+router.post('/api/farms', createFarm);
+
 // Ruta para verificar estado del servidor de autenticación
 router.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Auth service is running' });

@@ -1,9 +1,11 @@
-const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+const { HttpError } = require('../utils/errors');
+
+const errorMiddleware = (err, req, res, next) => {
+  console.error(err.message || 'Error desconocido');
+  const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     message: err.message || 'Error interno del servidor',
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
   });
 };
 
-module.exports = errorHandler;
+module.exports = errorMiddleware;

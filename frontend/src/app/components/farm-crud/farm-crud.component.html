@@ -1,0 +1,29 @@
+<div class="farm-crud-container">
+  <h1>Crear Nueva Finca</h1>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i> Guardando finca...
+  </div>
+
+  <!-- Formulario para crear una nueva finca -->
+  <form (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    <div class="form-group">
+      <label for="name">Nombre de la Finca</label>
+      <input type="text" id="name" [(ngModel)]="farm.name" name="name" required />
+    </div>
+    <div class="form-group">
+      <label for="location">Ubicación</label>
+      <input type="text" id="location" [(ngModel)]="farm.location" name="location" required />
+    </div>
+    <div class="form-group">
+      <label for="size">Tamaño (hectáreas)</label>
+      <input type="number" id="size" [(ngModel)]="farm.size" name="size" required />
+    </div>
+    <div class="form-group">
+      <label for="crops">Cultivos</label>
+      <input type="text" id="crops" [(ngModel)]="farm.crops" name="crops" placeholder="Separar por comas" />
+    </div>
+    <button type="submit" class="btn-submit">Guardar</button>
+  </form>
+</div>

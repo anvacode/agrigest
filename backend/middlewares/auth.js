@@ -1,95 +1,56 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 const { HttpError } = require('../utils/errors');
 
-// Verificación temprana de configuración
+// Verificar que la variable de entorno JWT_SECRET esté configurada
 if (!process.env.JWT_SECRET) {
   console.error('FATAL ERROR: JWT_SECRET no está definido en las variables de entorno');
-  process.exit(1); // Termina la aplicación si no hay JWT_SECRET
+  process.exit(1);
 }
 
 module.exports = (roles = [], options = {}) => {
-  // Opciones configurables
   const { allowExpired = false } = options;
 
-  // Normalización de roles
+  // Asegurarse de que roles sea un array
   if (typeof roles === 'string') {
     roles = [roles];
   }
-  roles = roles.map(role => role.toLowerCase());
+  roles = roles.map((role) => role.toLowerCase());
 
   return async (req, res, next) => {
     try {
-      // 1. Obtención del token desde múltiples fuentes
-      const token = (
-        req.header('Authorization')?.replace('Bearer ', '') ||
-        req.header('x-auth-token') ||
-        req.cookies?.token ||
-        req.query?.token
-      );
-
+      // Obtener el token del encabezado Authorization
+      const token = req.header('Authorization')?.replace('Bearer ', '');
+      console.log('Token recibido:', token);
       if (!token) {
         throw new HttpError(401, 'Token de autenticación requerido');
       }
 
-      // 2. Verificación del token
+      // Verificar el token
       const decoded = jwt.verify(token, process.env.JWT_SECRET, {
-        ignoreExpiration: allowExpired
+        ignoreExpiration: allowExpired, // Permitir tokens expirados si está configurado
       });
 
-      // 3. Validación de la estructura del token
-      if (!decoded?.user?.id) {
-        throw new HttpError(401, 'Estructura de token inválida');
+      // Buscar el usuario en la base de datos
+      const user = await User.findById(decoded.user.id).select('-password');
+      if (!user) {
+        throw new HttpError(401, 'Usuario no encontrado');
       }
 
-      // 4. Verificación de roles (si se especificaron)
-      if (roles.length > 0) {
-        const userRole = decoded.user.role?.toLowerCase();
-        if (!userRole || !roles.includes(userRole)) {
-          throw new HttpError(403, 'Permisos insuficientes');
-        }
+      // Adjuntar el usuario a la solicitud
+      req.user = user;
+
+      // Verificar roles si es necesario
+      if (roles.length && !roles.includes(user.role.toLowerCase())) {
+        throw new HttpError(403, 'No tienes permiso para realizar esta acción');
       }
 
-      // 5. Adjuntar usuario a la solicitud (sin datos sensibles)
-      req.user = {
-        id: decoded.user.id,
-        role: decoded.user.role,
-        ...(decoded.user.farm && { farm: decoded.user.farm })
-      };
-
-      // 6. Continuar
+      // Continuar con la siguiente función middleware
       next();
     } catch (error) {
-      // Manejo detallado de errores
-      switch (error.name) {
-        case 'TokenExpiredError':
-          error = new HttpError(401, 'Token expirado', {
-            expiredAt: error.expiredAt
-          });
-          break;
-        case 'JsonWebTokenError':
-          error = new HttpError(401, 
-            process.env.NODE_ENV === 'development' 
-              ? `Error JWT: ${error.message}`
-              : 'Token inválido'
-          );
-          break;
-        case 'NotBeforeError':
-          error = new HttpError(401, 'Token no válido aún', {
-            date: error.date
-          });
-          break;
-        default:
-          if (!(error instanceof HttpError)) {
-            error = new HttpError(500, 'Error de autenticación');
-          }
-      }
-
-      // Log en desarrollo
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Authentication Error:', error);
-      }
-
-      next(error);
+      console.error('Error en autenticación:', error.message || error);
+      // Enviar un error 401 si el token es inválido o expirado
+      next(new HttpError(401, 'Token inválido o expirado'));
     }
   };
 };
