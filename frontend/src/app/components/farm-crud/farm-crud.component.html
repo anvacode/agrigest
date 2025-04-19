@@ -1,29 +1,66 @@
 <div class="farm-crud-container">
-  <h1>Crear Nueva Finca</h1>
+  <!-- Contenedor del formulario -->
+  <div class="form-section">
+    <h1>Crear Nueva Finca</h1>
 
-  <!-- Indicador de carga -->
-  <div *ngIf="isLoading" class="loading-spinner">
-    <i class="fas fa-spinner fa-spin"></i> Guardando finca...
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Guardando finca...
+    </div>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+      <div class="form-group">
+        <label for="name">Nombre de la Finca</label>
+        <input type="text" id="name" [(ngModel)]="farm.name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="location">Ubicación</label>
+        <input type="text" id="location" [(ngModel)]="farm.location" name="location" required />
+      </div>
+      <div class="form-group">
+        <label for="size">Tamaño (hectáreas)</label>
+        <input type="number" id="size" [(ngModel)]="farm.size" name="size" required />
+      </div>
+      <div class="form-group">
+        <label for="crops">Cultivos</label>
+        <input type="text" id="crops" [(ngModel)]="farm.crops" name="crops" placeholder="Separar por comas" />
+      </div>
+      <button type="submit" class="btn-submit">Guardar</button>
+    </form>
   </div>
 
-  <!-- Formulario para crear una nueva finca -->
-  <form (ngSubmit)="onSubmit()" *ngIf="!isLoading">
-    <div class="form-group">
-      <label for="name">Nombre de la Finca</label>
-      <input type="text" id="name" [(ngModel)]="farm.name" name="name" required />
-    </div>
-    <div class="form-group">
-      <label for="location">Ubicación</label>
-      <input type="text" id="location" [(ngModel)]="farm.location" name="location" required />
-    </div>
-    <div class="form-group">
-      <label for="size">Tamaño (hectáreas)</label>
-      <input type="number" id="size" [(ngModel)]="farm.size" name="size" required />
-    </div>
-    <div class="form-group">
-      <label for="crops">Cultivos</label>
-      <input type="text" id="crops" [(ngModel)]="farm.crops" name="crops" placeholder="Separar por comas" />
-    </div>
-    <button type="submit" class="btn-submit">Guardar</button>
-  </form>
+  <!-- Tabla CRUD (reemplaza el slider) -->
+  <div class="crud-table-container">
+    <h2>Lista de Fincas</h2>
+    <table class="crud-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Ubicación</th>
+          <th>Tamaño (ha)</th>
+          <th>Cultivos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let farm of farms; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ farm.name }}</td>
+          <td>{{ farm.location }}</td>
+          <td>{{ farm.size }}</td>
+          <td>{{ farm.crops }}</td>
+          <td>
+            <button class="btn-icon" (click)="editFarm(farm)">
+              <i class="fas fa-edit"></i> <!-- Icono de editar -->
+            </button>
+            <button class="btn-icon" (click)="deleteFarm(farm.id)">
+              <i class="fas fa-trash"></i> <!-- Icono de eliminar -->
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
