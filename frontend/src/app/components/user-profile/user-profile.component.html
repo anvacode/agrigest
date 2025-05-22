@@ -1,0 +1,66 @@
+<div class="profile-container fade-in">
+  <div class="profile-inner slide-up">
+    <header class="profile-header">
+      <h2><i class="fas fa-user-circle"></i> Mi Perfil</h2>
+      <a routerLink="/home" class="icon-button" aria-label="Inicio">
+        <i class="fas fa-arrow-left"></i> Inicio
+      </a>
+    </header>
+
+    <main class="profile-content">
+      <div class="profile-card zoom-in">
+        <div class="avatar-box">
+          <img [src]="user.avatar" alt="Avatar" class="avatar pulse-on-hover">
+          <button *ngIf="isEditing" type="button" class="icon-button small" (click)="triggerFileInput()">
+            <i class="fas fa-camera"></i> Cambiar
+          </button>
+          <input type="file" class="visually-hidden" #fileInput (change)="handleAvatarUpload($event)">
+        </div>
+
+        <div class="info-group">
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <label for="name">Nombre:</label>
+            <span *ngIf="!isEditing">{{ user.name }}</span>
+            <input *ngIf="isEditing" id="name" [(ngModel)]="user.name" required>
+          </div>
+
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <label for="email">Email:</label>
+            <span *ngIf="!isEditing">{{ user.email }}</span>
+            <input *ngIf="isEditing" id="email" [(ngModel)]="user.email" type="email" required>
+          </div>
+
+          <div class="info-item">
+            <i class="fas fa-info-circle"></i>
+            <label for="bio">Biografía:</label>
+            <span *ngIf="!isEditing">{{ user.bio }}</span>
+            <textarea *ngIf="isEditing" id="bio" [(ngModel)]="user.bio"></textarea>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button *ngIf="!isEditing" class="icon-button" (click)="enableEditMode()">
+            <i class="fas fa-pen"></i> Editar
+          </button>
+          <ng-container *ngIf="isEditing">
+            <button class="icon-button success" (click)="saveProfile()">
+              <i class="fas fa-save"></i> Guardar
+            </button>
+            <button class="icon-button danger" (click)="cancelEdit()">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="stats-grid fade-in-delay">
+        <div class="stat bounce-in" *ngFor="let stat of statsArray">
+          <h4>{{ stat.label }}</h4>
+          <p>{{ stat.value }}</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

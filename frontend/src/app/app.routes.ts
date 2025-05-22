@@ -21,9 +21,14 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { 
-    path: 'farms/new', // Nueva ruta para el CRUD
+    path: 'farms/new',
     loadComponent: () => import('./components/farm-crud/farm-crud.component').then(m => m.FarmCrudComponent),
-    canActivate: [authGuard] // Protege la ruta con el guard si es necesario
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'user-profile',
+    loadComponent: () => import('./components/user-profile/user-profile.component').then(m => m.ProfileComponent), // Cambiado a ProfileComponent
+    canActivate: [authGuard]
   },
   { path: '**', redirectTo: '' }
 ];
