@@ -1,5 +1,14 @@
 @use "sass:color";
 
+// Variables
+$primary-green: #2e7d32;
+$accent-orange: #ff8f00;
+$report-color: #3f51b5;
+$crop-color: #4caf50;
+$danger-color: #ff5252;
+$text-primary: #263238;
+$text-secondary: #455a64;
+
 .dashboard-container {
   padding: 2rem;
   max-width: 1200px;
@@ -11,10 +20,111 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
 
   h1 {
-    color: #2e7d32; // Verde agrícola
+    color: $primary-green;
     font-size: 2rem;
+    margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .btn-primary {
+      background: $primary-green;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+
+      &:hover {
+        background: color.adjust($primary-green, $lightness: -10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+      }
+
+      &.active {
+        background: $crop-color;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+      }
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
+
+    .btn-logout {
+      background: $danger-color;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+
+      &:hover {
+        background: color.adjust($danger-color, $lightness: -10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+      }
+    }
+  }
+}
+
+.tab-content {
+  margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    color: $primary-green;
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
+  .btn-add {
+    background: $accent-orange;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background: color.adjust($accent-orange, $lightness: -10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 143, 0, 0.3);
+    }
+
+    i {
+      font-size: 1.1rem;
+    }
   }
 }
 
@@ -27,27 +137,35 @@
 
 .summary-card {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
 
   h3 {
-    color: #ff8f00; // Naranja
+    color: $accent-orange;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
+    font-weight: 600;
   }
 
   p {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
-    color: #263238;
+    color: $text-primary;
+    margin: 0;
   }
 }
 
 .farms-section {
   h2 {
-    color: #2e7d32;
+    color: $primary-green;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
   }
@@ -61,31 +179,33 @@
 
 .farm-card {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
 
   h3 {
-    color: #2e7d32;
-    margin-bottom: 0.5rem;
+    color: $primary-green;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
   }
 
   p {
-    color: #455a64;
+    color: $text-secondary;
     margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 
     i {
-      color: #ff8f00;
+      color: $accent-orange;
+      width: 16px;
     }
   }
 }
@@ -98,42 +218,371 @@
 }
 
 .crop-tag {
-  background: color.scale(#ff8f00, $lightness: 70%);
-  color: color.scale(#ff8f00, $lightness: -40%);
+  background: color.scale($accent-orange, $lightness: 80%);
+  color: color.adjust($accent-orange, $lightness: -30%);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.loading-spinner, .error-message {
-  text-align: center;
+// Estilos para CRUD de cultivos
+.crud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.crud-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  .crud-content {
+    flex: 1;
+
+    h3 {
+      color: $primary-green;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .crud-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    .btn-icon {
+      padding: 0.6rem;
+      border: none;
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: color.scale($primary-green, $lightness: 90%);
+      color: $primary-green;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      &.danger {
+        background: color.scale($danger-color, $lightness: 90%);
+        color: $danger-color;
+
+        &:hover {
+          background: $danger-color;
+          color: white;
+        }
+      }
+
+      i {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+.requirements-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
+.requirement-tag {
+  background: color.scale($crop-color, $lightness: 85%);
+  color: color.adjust($crop-color, $lightness: -25%);
+  padding: 0.2rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+// Estilos para reportes
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.report-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  .report-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    i {
+      font-size: 1.5rem;
+      color: $report-color;
+    }
+
+    h3 {
+      color: $text-primary;
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  .report-body {
+    margin-bottom: 1rem;
+  }
+
+  .requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .badge {
+        background: $accent-orange;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .report-footer {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: $report-color;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: color.adjust($report-color, $lightness: -15%);
+        text-decoration: underline;
+      }
+
+      i {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Estilos para el modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
   padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    color: $primary-green;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $text-primary;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      box-sizing: border-box;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-green;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+      }
+
+      &::placeholder {
+        color: #999;
+      }
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+    .btn-save {
+      background: $primary-green;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: color.adjust($primary-green, $lightness: -10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+      }
+    }
+
+    .btn-cancel {
+      background: #f5f5f5;
+      color: $text-secondary;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &:hover {
+        background: #e0e0e0;
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+// Estados de carga y error
+.loading-spinner,
+.error-message {
+  text-align: center;
+  padding: 3rem 2rem;
   font-size: 1.2rem;
 
   i {
     margin-right: 0.5rem;
+    font-size: 1.5rem;
+  }
+}
+
+.loading-spinner {
+  color: $primary-green;
+
+  i {
+    animation: spin 1s linear infinite;
   }
 }
 
 .error-message {
-  color: #c62828;
+  color: $danger-color;
+  background: color.scale($danger-color, $lightness: 95%);
+  border: 1px solid color.scale($danger-color, $lightness: 80%);
+  border-radius: 8px;
+  margin: 1rem 0;
 }
 
-.btn-add-farm {
-  background: #2e7d32;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.3s;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-  &:hover {
-    background: color.scale(#2e7d32, $lightness: -10%);
+// Responsive design
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
   }
 
-  i {
-    margin-right: 0.5rem;
+  .dashboard-header {
+    .header-actions {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .farms-grid,
+  .crud-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    margin: 1rem;
+    width: calc(100% - 2rem);
   }
 }

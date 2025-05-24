@@ -26,17 +26,17 @@ export class ProfileComponent implements OnInit {
 
   // Datos del usuario
   user = {
-    name: 'María García',
-    email: 'maria.garcia@example.com',
-    bio: 'Desarrolladora frontend con experiencia en Angular y diseño responsive.',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    joinDate: '15 Enero 2022'
+    name: 'Andres Vacca',
+    email: 'vaccadarwin@gmail.com',
+    bio: 'Desarrollador frontend con experiencia en Angular y diseño responsive.',
+    avatar: '',
+    joinDate: '24 Mayo 2025'
   };
 
   // Estadísticas del usuario (estructura optimizada para el template)
   statsArray = [
-    { id: 'posts', label: 'Publicaciones', value: 24 },
-    { id: 'followers', label: 'Seguidores', value: 156 },
+    { id: 'posts', label: 'Publicaciones', value: 8 },
+    { id: 'followers', label: 'Seguidores', value: 301 },
     { id: 'following', label: 'Seguidos', value: 89 },
     { id: 'lastActive', label: 'Última actividad', value: 'Hace 2 horas' }
   ];
