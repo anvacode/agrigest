@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FarmService } from '../../services/farm.service';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -28,7 +28,11 @@ export class FarmCrudComponent implements OnInit {
   // Variable para manejar el estado de carga
   isLoading = false;
 
-  constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private farmService: FarmService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadUserFarm(); // Cargar la finca del usuario al iniciar el componente
@@ -36,21 +40,11 @@ export class FarmCrudComponent implements OnInit {
 
   // Método para cargar la finca del usuario
   loadUserFarm(): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      console.error('No se encontró el token de autenticación.');
-      return;
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    this.http.get('http://localhost:5000/api/user-farm', { headers }).subscribe({
+    this.farmService.getFarms().subscribe({
       next: (response: any) => {
         console.log('Finca del usuario cargada:', response);
-        if (response) {
-          this.farms.push(response); // Añadir la finca del usuario a la tabla
+        if (response.data) {
+          this.farms = response.data;
         }
       },
       error: (error) => {
@@ -67,19 +61,8 @@ export class FarmCrudComponent implements OnInit {
       crops: this.farm.crops.split(',').map((crop) => crop.trim()),
     };
 
-    const token = this.authService.getToken();
-    if (!token) {
-      Swal.fire('Error', 'No se encontró el token de autenticación. Por favor, inicia sesión nuevamente.', 'error');
-      this.isLoading = false;
-      return;
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    this.http.post('http://localhost:5000/api/farms', farmData, { headers }).subscribe({
-      next: (response: any) => {
+    this.farmService.createFarm(farmData).subscribe({
+      next: (response) => {
         this.farms.push({
           id: response.id || this.farms.length + 1,
           name: farmData.name,
@@ -100,12 +83,14 @@ export class FarmCrudComponent implements OnInit {
 
         // Mostrar mensaje de éxito
         Swal.fire('Éxito', 'Finca creada exitosamente.', 'success');
+
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error('Error al crear la finca:', error);
         this.isLoading = false;
         Swal.fire('Error', 'Ocurrió un error al crear la finca. Inténtalo de nuevo.', 'error');
-      },
+      }
     });
   }
 

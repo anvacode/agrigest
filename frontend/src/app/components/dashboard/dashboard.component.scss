@@ -586,3 +586,84 @@ $text-secondary: #455a64;
     width: calc(100% - 2rem);
   }
 }
+
+// Estilos para estados vacíos
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f5f5f5;
+  border-radius: 12px;
+  margin: 1rem 0;
+
+  p {
+    color: $text-secondary;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+// Mejoras en las tablas
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    background: color.scale($primary-green, $lightness: 95%);
+    color: $primary-green;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  td {
+    color: $text-secondary;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: color.scale($primary-green, $lightness: 97%);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.5rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Mejoras en los spinners de carga
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin: 1rem 0;
+
+  i {
+    margin-right: 1rem;
+    color: $primary-green;
+  }
+}

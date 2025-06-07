@@ -8,11 +8,15 @@ interface User {
   name: string;
   email: string;
   role: string;
+  farms?: any[];
 }
 
 interface AuthResponse {
+  status: string;
   token: string;
-  user: User;
+  data: {
+    user: User;
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -36,8 +40,13 @@ export class AuthService {
   }
 
   private setAuth(response: AuthResponse): void {
-    localStorage.setItem(this.tokenKey, response.token);
-    localStorage.setItem(this.userKey, JSON.stringify(response.user));
+    if (response.status === 'success' && response.token && response.data.user) {
+      localStorage.setItem(this.tokenKey, response.token);
+      localStorage.setItem(this.userKey, JSON.stringify(response.data.user));
+    } else {
+      console.error('Respuesta de autenticación inválida:', response);
+      throw new Error('Respuesta de autenticación inválida');
+    }
   }
 
   getToken(): string | null {

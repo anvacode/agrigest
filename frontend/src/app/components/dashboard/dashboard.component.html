@@ -15,10 +15,6 @@
   </header>
 
   <!-- Loading y mensajes de error -->
-  <div *ngIf="loading" class="loading-spinner">
-    <i class="fas fa-spinner fa-spin"></i> Cargando datos...
-  </div>
-
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
@@ -27,140 +23,133 @@
   <div *ngIf="activeTab === 'farms'" class="tab-content">
     <div class="section-header">
       <h2>Gestión de Fincas</h2>
-      <button routerLink="/farms/new" class="btn-add">
+      <button class="btn-add" (click)="goToCreateFarm()">
         <i class="fas fa-plus"></i> Nueva Finca
       </button>
     </div>
 
-    <div class="summary-cards">
-      <div class="summary-card">
-        <h3>Total Fincas</h3>
-        <p>{{ farms.length }}</p>
-      </div>
-      <div class="summary-card">
-        <h3>Área Total</h3>
-        <p>{{ calculateTotalArea() }} hectáreas</p>
-      </div>
-      <div class="summary-card">
-        <h3>Próximas Actividades</h3>
-        <p>3 pendientes</p>
-      </div>
+    <div *ngIf="loading.farms" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Cargando fincas...
     </div>
 
-    <section class="farms-section">
-      <h2>Tus Fincas</h2>
-      <div class="farms-grid">
-        <div *ngFor="let farm of farms" class="farm-card" routerLink="/farms/{{farm.id}}">
-          <h3>{{ farm.name }}</h3>
-          <p><i class="fas fa-map-marker-alt"></i> {{ farm.location }}</p>
-          <p><i class="fas fa-arrows-alt"></i> {{ farm.size }} hectáreas</p>
-          <div class="crops-tags">
-            <span *ngFor="let crop of farm.crops" class="crop-tag">{{ crop }}</span>
-          </div>
+    <ng-container *ngIf="!loading.farms">
+      <div class="summary-cards">
+        <div class="summary-card">
+          <h3>Total Fincas</h3>
+          <p>{{ farms.length }}</p>
+        </div>
+        <div class="summary-card">
+          <h3>Área Total</h3>
+          <p>{{ calculateTotalArea() }} hectáreas</p>
         </div>
       </div>
-    </section>
+      <section class="farms-section" *ngIf="farms.length > 0">
+        <h2>Tus Fincas</h2>
+        <div class="farms-grid">
+          <div *ngFor="let farm of farms" class="farm-card">
+            <h3>{{ farm.name }}</h3>
+            <p><i class="fas fa-map-marker-alt"></i> {{ farm.location }}</p>
+            <p><i class="fas fa-arrows-alt"></i> {{ farm.size }} hectáreas</p>
+            <div class="crops-tags">
+              <span *ngFor="let crop of farm.crops" class="crop-tag">{{ crop }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div *ngIf="farms.length === 0" class="empty-state">
+        <p>No tienes fincas registradas. ¡Comienza creando una!</p>
+      </div>
+    </ng-container>
   </div>
 
-  <!-- Sección de Cultivos CRUD -->
+  <!-- Sección de Cultivos -->
   <div *ngIf="activeTab === 'crops'" class="tab-content">
     <div class="section-header">
-      <h2>Gestión de Cultivos</h2>
-      <button class="btn-add" (click)="openCropModal()">
-        <i class="fas fa-plus"></i> Nuevo Cultivo
-      </button>
+      <h2>Análisis de Cultivos</h2>
     </div>
 
-    <div class="crud-grid">
-      <div class="crud-card" *ngFor="let crop of crops">
-        <div class="crud-content">
-          <h3>{{ crop.nombre }}</h3>
-          <p>Tipo: {{ crop.variedad }}</p>
-          <p>Ciclo: {{ crop.ciclo_dias }} días</p>
-          <div class="requirements-tags">
-            <span *ngFor="let req of crop.requerimientos" class="requirement-tag">{{ req }}</span>
+    <div *ngIf="loading.cropAnalytics" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Cargando análisis de cultivos...
+    </div>
+
+    <ng-container *ngIf="!loading.cropAnalytics">
+      <div class="crud-grid" *ngIf="cropAnalytics.length > 0">
+        <div class="crud-card" *ngFor="let crop of cropAnalytics">
+          <div class="crud-content">
+            <h3>{{ crop.crop }}</h3>
+            <p>Cantidad de Fincas: {{ crop.count }}</p>
+            <p>Área Total: {{ crop.totalArea }} hectáreas</p>
+            <div class="requirements-tags">
+              <span *ngFor="let farm of crop.farms" class="requirement-tag">{{ farm.name }} ({{ farm.location }})</span>
+            </div>
           </div>
         </div>
-        <div class="crud-actions">
-          <button class="btn-icon" (click)="openCropModal(crop)">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn-icon danger" (click)="deleteCrop(crop._id)">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
       </div>
-    </div>
+      <div *ngIf="cropAnalytics.length === 0" class="empty-state">
+        <p>No hay datos de cultivos disponibles.</p>
+      </div>
+    </ng-container>
   </div>
 
-  <!-- Sección de Reportes con Agregaciones -->
+  <!-- Sección de Estadísticas -->
   <div *ngIf="activeTab === 'reports'" class="tab-content">
     <div class="section-header">
-      <h2>Reportes Analíticos</h2>
+      <h2>Estadísticas de cultivos por ubicación</h2>
     </div>
 
-    <div class="reports-grid">
-      <!-- Reporte 1: Rendimiento por parcela -->
-      <div class="report-card">
-        <div class="report-header">
-          <i class="fas fa-chart-line"></i>
-          <h3>Rendimiento por Parcela</h3>
-        </div>
-        <div class="report-body">
-          <canvas id="yieldChart"></canvas>
-        </div>
-        <div class="report-footer">
-          <button class="btn-link" (click)="generateYieldReport()">
-            <i class="fas fa-sync-alt"></i> Actualizar Datos
-          </button>
-        </div>
-      </div>
-
-      <!-- Reporte 2: Requerimientos comunes -->
-      <div class="report-card">
-        <div class="report-header">
-          <i class="fas fa-clipboard-list"></i>
-          <h3>Requerimientos de Cultivos</h3>
-        </div>
-        <div class="report-body">
-          <ul class="requirements-list">
-            <li *ngFor="let req of requirements">
-              {{ req._id }} <span class="badge">{{ req.total }}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div *ngIf="loading.cropStats" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Cargando estadísticas...
     </div>
-  </div>
 
-  <!-- Modal para Cultivos -->
-  <div class="modal-overlay" *ngIf="selectedCrop">
-    <div class="modal">
-      <h3>{{ selectedCrop._id ? 'Editar' : 'Nuevo' }} Cultivo</h3>
-      <div class="form-group">
-        <label>Nombre:</label>
-        <input type="text" [(ngModel)]="selectedCrop.nombre" placeholder="Ej: Maíz">
+    <ng-container *ngIf="!loading.cropStats">
+      <table *ngIf="cropStats.length > 0">
+        <tr>
+          <th>Ubicación</th>
+          <th>Total de granjas</th>
+          <th>Área total</th>
+          <th>Promedio de tamaño</th>
+          <th>Cultivos únicos</th>
+        </tr>
+        <tr *ngFor="let stat of cropStats">
+          <td>{{ stat.location }}</td>
+          <td>{{ stat.totalFarms }}</td>
+          <td>{{ stat.totalArea }}</td>
+          <td>{{ stat.averageSize }}</td>
+          <td>{{ stat.uniqueCrops }}</td>
+        </tr>
+      </table>
+      <div *ngIf="cropStats.length === 0" class="empty-state">
+        <p>No hay estadísticas disponibles.</p>
       </div>
-      <div class="form-group">
-        <label>Variedad:</label>
-        <input type="text" [(ngModel)]="selectedCrop.variedad" placeholder="Ej: Híbrido X">
-      </div>
-      <div class="form-group">
-        <label>Ciclo (días):</label>
-        <input type="number" [(ngModel)]="selectedCrop.ciclo_dias" placeholder="Ej: 90">
-      </div>
-      <div class="form-group">
-        <label>Requerimientos (separados por coma):</label>
-        <input type="text" [(ngModel)]="selectedCrop.requerimientosStr" placeholder="Ej: Riego frecuente, Fertilizante">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-save" (click)="saveCrop()">
-          <i class="fas fa-save"></i> Guardar
-        </button>
-        <button class="btn-cancel" (click)="selectedCrop = null">
-          <i class="fas fa-times"></i> Cancelar
-        </button>
-      </div>
+    </ng-container>
+
+    <div *ngIf="loading.userSummary" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Cargando resumen de usuarios...
     </div>
+
+    <ng-container *ngIf="!loading.userSummary">
+      <div *ngIf="userSummary.length > 0">
+        <h2>Resumen de Usuarios por Rol</h2>
+        <table>
+          <tr>
+            <th>Rol</th>
+            <th>Cantidad</th>
+            <th>Usuarios recientes</th>
+          </tr>
+          <tr *ngFor="let role of userSummary">
+            <td>{{ role.role }}</td>
+            <td>{{ role.count }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let user of role.recentUsers">{{ user.name }} ({{ user.email }})</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="userSummary.length === 0" class="empty-state">
+        <p>No hay datos de usuarios disponibles.</p>
+      </div>
+    </ng-container>
   </div>
 </div>
