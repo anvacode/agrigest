@@ -9,6 +9,9 @@ interface User {
   email: string;
   role: string;
   farms?: any[];
+  bio?: string;
+  avatar?: string;
+  joinDate?: string;
 }
 
 interface AuthResponse {
@@ -65,5 +68,15 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
+  }
+
+  updateProfile(profileData: any): Observable<AuthResponse> {
+    return this.http.put<AuthResponse>(`${this.apiUrl}/auth/profile`, profileData).pipe(
+      tap(response => {
+        if (response.status === 'success' && response.data.user) {
+          localStorage.setItem(this.userKey, JSON.stringify(response.data.user));
+        }
+      })
+    );
   }
 }

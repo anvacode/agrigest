@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -41,7 +43,21 @@ export class ProfileComponent implements OnInit {
     { id: 'lastActive', label: 'Última actividad', value: 'Hace 2 horas' }
   ];
 
+  errorMessage = '';
+
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
+    const storedUser = this.authService.getUser();
+    if (storedUser) {
+      this.user = {
+        name: storedUser.name,
+        email: storedUser.email,
+        bio: storedUser.bio || '',
+        avatar: storedUser.avatar || '',
+        joinDate: storedUser.joinDate || this.user.joinDate
+      };
+    }
     this.originalUserData = { ...this.user };
   }
 
@@ -106,24 +122,25 @@ export class ProfileComponent implements OnInit {
   // Guarda el perfil
   saveProfile(): void {
     this.validateForm();
-    
     const hasErrors = Object.values(this.formErrors).some(error => error !== '');
-    
     if (hasErrors) {
       alert('Por favor corrija los errores antes de guardar');
       return;
     }
-
     this.isSubmitting = true;
-    
-    // Simulación de llamada a API
-    setTimeout(() => {
-      console.log('Perfil actualizado:', this.user);
-      this.isEditing = false;
-      this.isSubmitting = false;
-      this.originalUserData = { ...this.user };
-      this.statsArray[3].value = 'Recién ahora'; // Actualiza "Última actividad"
-    }, 1500);
+    this.errorMessage = '';
+    this.authService.updateProfile(this.user).subscribe({
+      next: (response) => {
+        this.isEditing = false;
+        this.isSubmitting = false;
+        this.originalUserData = { ...this.user };
+        this.statsArray[3].value = 'Recién ahora';
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isSubmitting = false;
+        this.errorMessage = err.error?.message || 'Error al actualizar el perfil';
+      }
+    });
   }
 
   // Cancela la edición

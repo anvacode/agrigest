@@ -4,6 +4,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { CommonModule } from '@angular/common';
 import { FarmService } from '../../services/farm.service';
 import { AuthService } from '../../services/auth.service';
+import { AnalyticsComponent } from '../analytics/analytics.component';
 
 interface Farm {
   _id: string;
@@ -37,7 +38,7 @@ interface UserSummary {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AnalyticsComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -147,5 +148,9 @@ export class DashboardComponent implements OnInit {
 
   goToCreateFarm(): void {
     this.router.navigate(['/farms/new']);
+  }
+
+  goToCreateCultivo(): void {
+    this.router.navigate(['/cultivos/nuevo']);
   }
 }

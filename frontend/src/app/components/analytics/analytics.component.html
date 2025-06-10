@@ -1,0 +1,13 @@
+<div class="analytics-container">
+  <h2>Panel de Analíticas</h2>
+  <div *ngIf="cargando" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i> Cargando datos...
+  </div>
+  <div *ngIf="!cargando">
+    <canvas baseChart
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [type]="barChartType">
+    </canvas>
+  </div>
+</div>

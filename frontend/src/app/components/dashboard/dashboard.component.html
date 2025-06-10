@@ -66,6 +66,9 @@
   <div *ngIf="activeTab === 'crops'" class="tab-content">
     <div class="section-header">
       <h2>Análisis de Cultivos</h2>
+      <button class="btn-add" (click)="goToCreateCultivo()">
+        <i class="fas fa-plus"></i> Nuevo Cultivo
+      </button>
     </div>
 
     <div *ngIf="loading.cropAnalytics" class="loading-spinner">
@@ -96,6 +99,7 @@
     <div class="section-header">
       <h2>Estadísticas de cultivos por ubicación</h2>
     </div>
+    <app-analytics></app-analytics>
 
     <div *ngIf="loading.cropStats" class="loading-spinner">
       <i class="fas fa-spinner fa-spin"></i> Cargando estadísticas...

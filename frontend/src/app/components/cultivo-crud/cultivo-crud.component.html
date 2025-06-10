@@ -1,0 +1,113 @@
+<div class="cultivo-crud-container">
+  <!-- Sección del formulario -->
+  <div class="form-section">
+    <h2>Crear Nuevo Cultivo</h2>
+    <form (ngSubmit)="crearCultivo()" #cultivoForm="ngForm">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" [(ngModel)]="cultivo.nombre" required />
+      </div>
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <input type="text" id="tipo" name="tipo" [(ngModel)]="cultivo.tipo" required />
+      </div>
+      <div class="form-group">
+        <label for="fechaSiembra">Fecha de Siembra</label>
+        <input type="date" id="fechaSiembra" name="fechaSiembra" [(ngModel)]="cultivo.fechaSiembra" required />
+      </div>
+      <div class="form-group">
+        <label for="farm">Finca</label>
+        <select id="farm" name="farm" [(ngModel)]="cultivo.farm" required>
+          <option value="" disabled>Selecciona una finca</option>
+          <option *ngFor="let finca of fincas" [value]="finca._id">{{ finca.name }}</option>
+        </select>
+      </div>
+      <button type="submit" [disabled]="creando || !cultivoForm.form.valid">Crear Cultivo</button>
+    </form>
+  </div>
+
+  <!-- Sección de la tabla -->
+  <div class="crud-table-container">
+    <h2>Lista de Cultivos</h2>
+    <div style="margin-bottom: 1rem; text-align: right;">
+      <button class="btn-join" (click)="abrirModalJoin()">Ver cultivos con finca y usuario</button>
+    </div>
+    <div *ngIf="cargando" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Cargando cultivos...
+    </div>
+    <table class="crud-table" *ngIf="!cargando && cultivos.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Fecha de Siembra</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cultivo of cultivos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td *ngIf="editIndex !== i">{{ cultivo.nombre }}</td>
+          <td *ngIf="editIndex === i"><input [(ngModel)]="editCultivo.nombre" placeholder="Nombre" title="Editar nombre" /></td>
+          <td *ngIf="editIndex !== i">{{ cultivo.tipo }}</td>
+          <td *ngIf="editIndex === i"><input [(ngModel)]="editCultivo.tipo" placeholder="Tipo" title="Editar tipo" /></td>
+          <td *ngIf="editIndex !== i">{{ cultivo.fechaSiembra | date:'dd/MM/yyyy' }}</td>
+          <td *ngIf="editIndex === i"><input type="date" [(ngModel)]="editCultivo.fechaSiembra" title="Editar fecha de siembra" /></td>
+          <td>
+            <button class="btn-icon" *ngIf="editIndex !== i" (click)="startEdit(i, cultivo)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon" *ngIf="editIndex === i" (click)="saveEdit(cultivo)" title="Guardar">
+              <i class="fas fa-save"></i>
+            </button>
+            <button class="btn-icon" *ngIf="editIndex === i" (click)="cancelEdit()" title="Cancelar">
+              <i class="fas fa-times"></i>
+            </button>
+            <button class="btn-icon" (click)="eliminarCultivo(cultivo)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!cargando && cultivos.length === 0" class="empty-state">
+      <p>No tienes cultivos registrados. ¡Comienza creando uno!</p>
+    </div>
+  </div>
+
+  <!-- Modal para cultivos con join -->
+  <div class="modal-join" *ngIf="mostrarModalJoin">
+    <div class="modal-join-backdrop" (click)="cerrarModalJoin()"></div>
+    <div class="modal-join-content">
+      <button class="modal-join-close" (click)="cerrarModalJoin()">&times;</button>
+      <h2>Cultivos con información de Finca y Usuario</h2>
+      <table class="crud-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha de Siembra</th>
+            <th>Finca</th>
+            <th>Ubicación Finca</th>
+            <th>Dueño</th>
+            <th>Email Dueño</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of cultivosJoin; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.tipo }}</td>
+            <td>{{ c.fechaSiembra | date:'dd/MM/yyyy' }}</td>
+            <td>{{ c.farmInfo?.name }}</td>
+            <td>{{ c.farmInfo?.location }}</td>
+            <td>{{ c.ownerInfo?.name }}</td>
+            <td>{{ c.ownerInfo?.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

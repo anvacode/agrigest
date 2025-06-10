@@ -30,5 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/user-profile/user-profile.component').then(m => m.ProfileComponent), // Cambiado a ProfileComponent
     canActivate: [authGuard]
   },
+  { 
+    path: 'cultivos/nuevo',
+    loadComponent: () => import('./components/cultivo-crud/cultivo-crud.component').then(m => m.CultivoCrudComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '' }
 ];
