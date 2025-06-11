@@ -1,8 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { createFarm } = require('../controllers/farm.controller');
-const authMiddleware = require('../middlewares/auth');
+const { createFarm, getFarms, updateFarm } = require('../controllers/farm.controller');
+const { protect } = require('../middleware/auth.middleware');
 
-router.post('/farms', authMiddleware(), createFarm);
+// Proteger todas las rutas
+router.use(protect);
+
+// Rutas de fincas
+router.get('/', getFarms);
+router.post('/', createFarm);
+router.put('/:id', updateFarm);
 
 module.exports = router;

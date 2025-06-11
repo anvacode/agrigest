@@ -17,5 +17,9 @@ export class FarmService {
     return this.http.post(this.apiUrl, farm);
   }
 
+  updateFarm(id: string, farm: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, farm);
+  }
+
   // Puedes agregar métodos para editar/eliminar si lo necesitas
 }

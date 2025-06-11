@@ -3,11 +3,24 @@
   <div *ngIf="cargando" class="loading-spinner">
     <i class="fas fa-spinner fa-spin"></i> Cargando datos...
   </div>
+  <div class="analytics-toggle">
+    <button [class.active]="chartView === 'bar'" (click)="chartView = 'bar'">
+      <i class="fas fa-chart-bar"></i> Barras
+    </button>
+    <button [class.active]="chartView === 'pie'" (click)="chartView = 'pie'">
+      <i class="fas fa-chart-pie"></i> Torta
+    </button>
+  </div>
   <div *ngIf="!cargando">
-    <canvas baseChart
+    <canvas *ngIf="chartView === 'bar'" baseChart
       [data]="barChartData"
       [options]="barChartOptions"
       [type]="barChartType">
+    </canvas>
+    <canvas *ngIf="chartView === 'pie'" baseChart
+      [data]="pieChartData"
+      [options]="pieChartOptions"
+      [type]="pieChartType">
     </canvas>
   </div>
 </div>

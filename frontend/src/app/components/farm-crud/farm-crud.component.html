@@ -26,7 +26,8 @@
         <label for="crops">Cultivos</label>
         <input type="text" id="crops" [(ngModel)]="farm.crops" name="crops" placeholder="Separar por comas" />
       </div>
-      <button type="submit" class="btn-submit">Guardar</button>
+      <button type="submit" class="btn-submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button *ngIf="isEditing" type="button" class="btn-submit" style="background:#aaa;margin-left:1rem;" (click)="cancelEdit()">Cancelar</button>
     </form>
   </div>
 
@@ -53,11 +54,36 @@
           <td>{{ farm.crops }}</td>
           <td>
             <button class="btn-icon" (click)="editFarm(farm)">
-              <i class="fas fa-edit"></i> <!-- Icono de editar -->
+              <i class="fas fa-edit"></i>
             </button>
             <button class="btn-icon" (click)="deleteFarm(farm.id)">
-              <i class="fas fa-trash"></i> <!-- Icono de eliminar -->
+              <i class="fas fa-trash"></i>
             </button>
+            <button class="btn-icon" (click)="getWeatherForFarm(farm)" title="Ver clima">
+              <i class="fas fa-cloud-sun"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngFor="let farm of farms">
+          <td colspan="6" *ngIf="weather[farm._id || farm.id]">
+            <div class="weather-info">
+              <ng-container *ngIf="!weather[farm._id || farm.id].error; else errorBlock">
+                <strong>Clima en {{ farm.location }}:</strong>
+                <span *ngIf="weather[farm._id || farm.id]?.weather?.length">
+                  {{ weather[farm._id || farm.id].weather[0].description | titlecase }}
+                  - {{ weather[farm._id || farm.id].main.temp }}°C
+                  (Humedad: {{ weather[farm._id || farm.id].main.humidity }}%)
+                </span>
+                <span *ngIf="!weather[farm._id || farm.id]?.weather?.length">
+                  No disponible
+                </span>
+              </ng-container>
+              <ng-template #errorBlock>
+                <span style="color: #f44336; font-weight: bold;">
+                  {{ weather[farm._id || farm.id].error }}
+                </span>
+              </ng-template>
+            </div>
           </td>
         </tr>
       </tbody>

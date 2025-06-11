@@ -3,8 +3,12 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth.routes');
-const errorHandler = require('./middlewares/errorMiddleware');
-const farmRoutes = require('./routes/farm.routes'); 
+const errorHandler = require('./middleware/error.middleware');
+const farmRoutes = require('./routes/farm.routes');
+const analyticsRoutes = require('./routes/analytics.routes'); 
+const cultivoRoutes = require('./routes/cultivo.routes');
+const taskRoutes = require('./routes/task.routes'); // Importar las rutas de tareas
+const externalRoutes = require('./routes/external.routes'); // Importar las rutas externas
 
 // Verificar si MONGO_URI está definido
 if (!process.env.MONGO_URI) {
@@ -35,17 +39,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rutas principales
-app.use('/api/auth', authRoutes);
-app.use('/api', farmRoutes);
-
-// Middleware de manejo de errores
-app.use(errorHandler);
-
 // Ruta de prueba
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
 });
+
+// Rutas principales
+app.use('/api/auth', authRoutes);
+app.use('/api/farms', farmRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api/cultivos', cultivoRoutes);
+app.use('/api/tasks', taskRoutes); // Usar las rutas de tareas
+app.use('/api/external', externalRoutes); // Usar las rutas externas
+
+// Middleware de manejo de errores
+app.use(errorHandler);
 
 // Iniciar el servidor solo si la DB se conecta
 const startServer = async () => {

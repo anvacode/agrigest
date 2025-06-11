@@ -1,0 +1,36 @@
+.analytics-toggle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: flex-end;
+}
+.analytics-toggle button {
+  background: #f5f5f5;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2a7a3b;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.analytics-toggle button.active,
+.analytics-toggle button:hover {
+  background: #2a7a3b;
+  color: #fff;
+}
+.analytics-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+canvas {
+  max-width: 100% !important;
+  max-height: 320px !important;
+  width: 100% !important;
+  height: 320px !important;
+  margin: 0 auto;
+  display: block;
+}

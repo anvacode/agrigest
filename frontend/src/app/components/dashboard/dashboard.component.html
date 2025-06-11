@@ -19,6 +19,26 @@
     {{ errorMessage }}
   </div>
 
+  <!-- KPIs resumen -->
+  <div class="kpi-cards">
+    <div class="kpi-card">
+      <div class="kpi-title">Total de Fincas</div>
+      <div class="kpi-value">{{ farms.length }}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Total de Cultivos</div>
+      <div class="kpi-value">{{ getTotalCultivos() }}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Área Total (ha)</div>
+      <div class="kpi-value">{{ calculateTotalArea() }}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Tareas Pendientes</div>
+      <div class="kpi-value">{{ pendingTasksCount }}</div>
+    </div>
+  </div>
+
   <!-- Sección de Fincas -->
   <div *ngIf="activeTab === 'farms'" class="tab-content">
     <div class="section-header">

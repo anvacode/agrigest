@@ -23,6 +23,11 @@ const FarmSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'El propietario es requerido']
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -43,5 +48,9 @@ FarmSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });
+
+// Índices para mejorar el rendimiento
+FarmSchema.index({ owner: 1 });
+FarmSchema.index({ location: 1 });
 
 module.exports = mongoose.model('Farm', FarmSchema);

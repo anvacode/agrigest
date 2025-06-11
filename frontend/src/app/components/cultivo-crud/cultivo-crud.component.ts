@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe, CommonModule } from '@angular/common';
 import { CultivoService, Cultivo } from '../../services/cultivo.service';
 import { FarmService } from '../../services/farm.service';
+import { ExternalService } from '../../services/external.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,8 +23,14 @@ export class CultivoCrudComponent implements OnInit {
   cultivosJoin: any[] = [];
   fincas: any[] = [];
   mostrarModalJoin = false;
+  marketPrice: any = {};
+  loadingMarket: boolean = false;
 
-  constructor(private cultivoService: CultivoService, private farmService: FarmService) {}
+  constructor(
+    private cultivoService: CultivoService,
+    private farmService: FarmService,
+    private externalService: ExternalService
+  ) {}
 
   ngOnInit() {
     this.cargarCultivos();
@@ -142,5 +149,22 @@ export class CultivoCrudComponent implements OnInit {
 
   cerrarModalJoin() {
     this.mostrarModalJoin = false;
+  }
+
+  // Obtener precio de mercado para un cultivo
+  getMarketPriceForCultivo(cultivo: Cultivo) {
+    const key = cultivo._id || cultivo.nombre;
+    if (!cultivo.nombre) return;
+    this.loadingMarket = true;
+    this.externalService.getMarketPrice(cultivo.nombre).subscribe({
+      next: (res) => {
+        this.marketPrice[key] = res.data;
+        this.loadingMarket = false;
+      },
+      error: () => {
+        this.marketPrice[key] = null;
+        this.loadingMarket = false;
+      }
+    });
   }
 }

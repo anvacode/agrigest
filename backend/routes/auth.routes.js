@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { register, login } = require('../controllers/auth.controller');
+const { register, login, updateProfile } = require('../controllers/auth.controller');
 const { validateRequest } = require('../validations/validation');
 const { 
   registerSchema, 
   loginSchema 
 } = require('../validations/auth.validation');
+const { protect } = require('../middleware/auth.middleware');
 
 // Ruta de registro con validaciones
 router.post(
@@ -21,11 +22,8 @@ router.post(
   login
 );
 
-// Controlador para manejar las fincas
-const { createFarm } = require('../controllers/farm.controller');
-
-// Ruta para crear una nueva finca
-router.post('/api/farms', createFarm);
+// Ruta para actualizar perfil (protegida)
+router.put('/profile', protect, updateProfile);
 
 // Ruta para verificar estado del servidor de autenticación
 router.get('/health', (req, res) => {

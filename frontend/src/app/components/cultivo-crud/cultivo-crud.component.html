@@ -67,6 +67,22 @@
             <button class="btn-icon" (click)="eliminarCultivo(cultivo)" title="Eliminar">
               <i class="fas fa-trash"></i>
             </button>
+            <button class="btn-icon" (click)="getMarketPriceForCultivo(cultivo)" title="Ver precio de mercado">
+              <i class="fas fa-dollar-sign"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngFor="let cultivo of cultivos">
+          <td colspan="5" *ngIf="marketPrice[cultivo._id || cultivo.nombre]">
+            <div class="market-info">
+              <strong>Precio de mercado para {{ cultivo.nombre }}:</strong>
+              <span *ngIf="marketPrice[cultivo._id || cultivo.nombre]?.length">
+                {{ marketPrice[cultivo._id || cultivo.nombre][0]?.price || 'No disponible' }}
+              </span>
+              <span *ngIf="!marketPrice[cultivo._id || cultivo.nombre]?.length">
+                No disponible
+              </span>
+            </div>
           </td>
         </tr>
       </tbody>

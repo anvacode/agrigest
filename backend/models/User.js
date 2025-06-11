@@ -37,13 +37,10 @@ const UserSchema = new mongoose.Schema({
     },
     default: 'farmer'
   },
-  farm: {
+  farms: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Farm',
-    required: function() {
-      return this.role === 'farmer';
-    }
-  },
+    ref: 'Farm'
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -163,6 +160,6 @@ UserSchema.virtual('farmDetails', {
 });
 
 // Índices para mejorar rendimiento
-UserSchema.index({ farm: 1 }); 
+UserSchema.index({ email: 1 }, { unique: true });
 
 module.exports = mongoose.model('User', UserSchema);

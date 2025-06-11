@@ -29,6 +29,24 @@ export class AnalyticsComponent implements OnInit {
   barChartType: 'bar' = 'bar';
   cargando = false;
 
+  // Configuración de la gráfica de torta (pie)
+  pieChartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    plugins: {
+      legend: { display: true, position: 'bottom' },
+      title: { display: true, text: 'Distribución de cultivos por tipo' }
+    }
+  };
+  pieChartData: ChartData<'pie'> = {
+    labels: [],
+    datasets: [
+      { data: [], label: 'Distribución de cultivos' }
+    ]
+  };
+  pieChartType: 'pie' = 'pie';
+
+  chartView: 'bar' | 'pie' = 'bar';
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -40,8 +58,13 @@ export class AnalyticsComponent implements OnInit {
     this.http.get<any>('/api/analytics/crop-analytics').subscribe({
       next: (res) => {
         const datos = res.data || [];
+        // Barras
         this.barChartData.labels = datos.map((d: any) => d.crop);
         this.barChartData.datasets[0].data = datos.map((d: any) => d.count);
+        // Pie
+        // Asegura que los datos sean solo números y no null ni arrays
+        this.pieChartData.labels = this.barChartData.labels;
+        this.pieChartData.datasets[0].data = (this.barChartData.datasets[0].data as number[]).map(x => (typeof x === 'number' ? x : 0));
         this.cargando = false;
       },
       error: (err) => {

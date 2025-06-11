@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FarmService } from '../../services/farm.service';
 import { AuthService } from '../../services/auth.service';
 import { AnalyticsComponent } from '../analytics/analytics.component';
+import { TaskService } from '../../services/task.service';
 
 interface Farm {
   _id: string;
@@ -52,15 +53,18 @@ export class DashboardComponent implements OnInit {
     farms: false,
     cropStats: false,
     cropAnalytics: false,
-    userSummary: false
+    userSummary: false,
+    pendingTasks: false
   };
   errorMessage = '';
+  pendingTasksCount = 0;
 
   constructor(
     private router: Router,
     private analyticsService: AnalyticsService,
     private farmService: FarmService,
-    private authService: AuthService
+    private authService: AuthService,
+    private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +75,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.loadDashboardData();
+    this.loadPendingTasks();
   }
 
   loadDashboardData(): void {
@@ -137,8 +142,27 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  loadPendingTasks(): void {
+    this.loading['pendingTasks'] = true;
+    this.taskService.getTasks({ status: 'pendiente' }).subscribe({
+      next: (tasks: any[]) => {
+        this.pendingTasksCount = tasks.length;
+        this.loading['pendingTasks'] = false;
+      },
+      error: () => {
+        this.pendingTasksCount = 0;
+        this.loading['pendingTasks'] = false;
+      }
+    });
+  }
+
   calculateTotalArea(): number {
     return this.farms.reduce((total, farm) => total + (farm.size || 0), 0);
+  }
+
+  // Devuelve el total de cultivos para el dashboard
+  getTotalCultivos(): number {
+    return this.cropAnalytics.reduce((acc, c) => acc + c.count, 0);
   }
 
   logout(): void {

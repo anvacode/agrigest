@@ -1,0 +1,73 @@
+<div class="task-crud-container">
+  <div class="form-section">
+    <h1>{{ isEditing ? 'Editar Tarea' : 'Crear Nueva Tarea' }}</h1>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input id="title" [(ngModel)]="task.title" name="title" required />
+      </div>
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea id="description" [(ngModel)]="task.description" name="description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="date">Fecha</label>
+        <input id="date" type="date" [(ngModel)]="task.date" name="date" required />
+      </div>
+      <div class="form-group">
+        <label for="status">Estado</label>
+        <select id="status" [(ngModel)]="task.status" name="status">
+          <option value="pendiente">Pendiente</option>
+          <option value="en progreso">En progreso</option>
+          <option value="completada">Completada</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="farm">Finca</label>
+        <select id="farm" [(ngModel)]="task.farm" name="farm" required (ngModelChange)="filtrarCultivosPorFinca()">
+          <option *ngFor="let farm of farms" [value]="farm._id">{{ farm.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cultivo">Cultivo (opcional)</label>
+        <select id="cultivo" [(ngModel)]="task.cultivo" name="cultivo">
+          <option value="">-- Ninguno --</option>
+          <option *ngFor="let cultivo of cultivosFiltrados" [value]="cultivo._id">{{ cultivo.nombre }}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-submit">{{ isEditing ? 'Actualizar' : 'Guardar' }}</button>
+      <button *ngIf="isEditing" type="button" class="btn-submit" style="background:#aaa;margin-left:1rem;" (click)="cancelEdit()">Cancelar</button>
+    </form>
+  </div>
+
+  <div class="crud-table-container">
+    <h2>Lista de Tareas</h2>
+    <table class="crud-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Título</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Finca</th>
+          <th>Cultivo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of tasks; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ t.title }}</td>
+          <td>{{ t.date | date:'yyyy-MM-dd' }}</td>
+          <td>{{ t.status }}</td>
+          <td>{{ t.farm?.name }}</td>
+          <td>{{ getCultivoNombre(t.cultivo) }}</td>
+          <td>
+            <button class="btn-icon" (click)="editTask(t)"><i class="fas fa-edit"></i></button>
+            <button class="btn-icon" (click)="deleteTask(t._id)"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

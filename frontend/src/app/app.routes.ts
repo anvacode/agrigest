@@ -35,5 +35,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/cultivo-crud/cultivo-crud.component').then(m => m.CultivoCrudComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'tareas',
+    loadComponent: () => import('./components/task-crud/task-crud.component').then(m => m.TaskCrudComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '' }
 ];

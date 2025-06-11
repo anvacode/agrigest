@@ -14,107 +14,138 @@ const generateToken = (userId, role) => {
   );
 };
 
+// Registro de usuario
 exports.register = async (req, res, next) => {
   try {
-    // Validación de campos
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new HttpError(400, 'Validation errors', errors.array());
+    const { name, email, password, role } = req.body;
+
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      throw new HttpError(400, 'El correo electrónico ya está registrado');
     }
 
-    const { name, email, password, role, farm } = req.body;
-    
-    // Verificar usuario existente
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      throw new HttpError(409, 'Email already in use');
-    }
-
-    // Crear finca primero
-    const newFarm = new Farm({
-      name: farm.name,
-      location: farm.location,
-      size: farm.size,
-      crops: farm.crops || []
-    });
-    await newFarm.save();
-
-    // Crear usuario
-    const user = new User({
+    // Crear el usuario
+    const user = await User.create({
       name,
       email,
       password,
-      role,
-      farm: newFarm._id
+      role: role || 'farmer'
     });
 
-    await user.save();
+    // Si se proporcionan datos de finca y el usuario es farmer, crear la finca
+    if (req.body.farm && role === 'farmer') {
+      const farm = await Farm.create({
+        ...req.body.farm,
+        owner: user._id
+      });
+      user.farms = [farm._id];
+      await user.save();
+    }
 
     // Generar token
-    const token = generateToken(user.id, user.role);
+    const token = generateToken(user._id, user.role);
 
-    // Respuesta exitosa
+    // Enviar respuesta
     res.status(201).json({
+      status: 'success',
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        farm: {
-          id: newFarm._id,
-          name: newFarm.name,
-          location: newFarm.location
+      data: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role
         }
       }
     });
-
   } catch (error) {
     next(error);
   }
 };
 
+// Login de usuario
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Validar entrada (opcional si ya se usa validateRequest)
+    // Validar entrada
     if (!email || !password) {
-      throw new HttpError(400, 'El correo electrónico y la contraseña son obligatorios.');
+      throw new HttpError(400, 'El correo electrónico y la contraseña son obligatorios');
     }
 
-    // Buscar usuario por correo electrónico
-    const user = await User.findOne({ email }).select('+password').populate('farm');
+    // Buscar usuario y sus fincas
+    const user = await User.findOne({ email })
+      .select('+password')
+      .populate('farms');
+
     if (!user) {
-      throw new HttpError(401, 'Credenciales inválidas.');
+      throw new HttpError(401, 'Credenciales inválidas');
     }
 
-    // Comparar contraseñas
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Verificar contraseña
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      throw new HttpError(401, 'Credenciales inválidas.');
+      throw new HttpError(401, 'Credenciales inválidas');
     }
 
     // Generar token
-    const token = generateToken(user.id, user.role);
+    const token = generateToken(user._id, user.role);
 
-    // Respuesta exitosa
+    // Enviar respuesta
     res.json({
+      status: 'success',
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        farm: {
-          id: user.farm._id,
-          name: user.farm.name,
-          location: user.farm.location,
-        },
-      },
+      data: {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          farms: user.farms
+        }
+      }
     });
   } catch (error) {
-    console.error('Error en login:', error); // Registrar el error
-    next(error); // Pasar el error al middleware de manejo de errores
+    next(error);
+  }
+};
+
+// Actualizar perfil de usuario
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const { name, email, bio, avatar } = req.body;
+
+    // Validaciones básicas
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Nombre y email son obligatorios.' });
+    }
+
+    // Actualizar usuario
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name, email, bio, avatar },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado.' });
+    }
+
+    res.json({
+      status: 'success',
+      data: {
+        user: {
+          id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          bio: updatedUser.bio,
+          avatar: updatedUser.avatar
+        }
+      }
+    });
+  } catch (error) {
+    next(error);
   }
 };
