@@ -82,12 +82,20 @@
           <td colspan="5" *ngIf="marketPrice[cultivo._id || cultivo.nombre]">
             <div class="market-info">
               <strong>Precio de mercado para {{ cultivo.nombre }}:</strong>
-              <span *ngIf="marketPrice[cultivo._id || cultivo.nombre]?.length">
-                {{ marketPrice[cultivo._id || cultivo.nombre][0]?.price || 'No disponible' }}
-              </span>
-              <span *ngIf="!marketPrice[cultivo._id || cultivo.nombre]?.length">
-                No disponible
-              </span>
+              <ng-container *ngIf="marketPrice[cultivo._id || cultivo.nombre]?.cop">
+                <span>
+                  {{ marketPrice[cultivo._id || cultivo.nombre]?.cop | number:'1.0-0' }} COP
+                  <small class="text-muted">(Tasa: 1 USD = {{ marketPrice[cultivo._id || cultivo.nombre]?.usdToCop | number:'1.0-0' }} COP)</small>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="!marketPrice[cultivo._id || cultivo.nombre]?.cop && marketPrice[cultivo._id || cultivo.nombre]?.usd">
+                <span>
+                  {{ marketPrice[cultivo._id || cultivo.nombre]?.usd | number:'1.2-2' }} USD
+                </span>
+              </ng-container>
+              <ng-container *ngIf="!marketPrice[cultivo._id || cultivo.nombre]?.cop && !marketPrice[cultivo._id || cultivo.nombre]?.usd">
+                <span>No disponible</span>
+              </ng-container>
             </div>
           </td>
         </tr>

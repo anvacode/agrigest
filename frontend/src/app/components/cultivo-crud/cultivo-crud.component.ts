@@ -159,7 +159,13 @@ export class CultivoCrudComponent implements OnInit {
     this.loadingMarket = true;
     this.externalService.getMarketPrice(cultivo.nombre).subscribe({
       next: (res) => {
-        this.marketPrice[key] = res.data;
+        // Soporta respuesta con priceCOP y USD
+        this.marketPrice[key] = {
+          usd: Array.isArray(res.data) && res.data.length > 0 ? res.data[0].price : null,
+          cop: res.priceCOP || null,
+          usdToCop: res.usdToCop || null,
+          raw: res.data
+        };
         this.loadingMarket = false;
       },
       error: () => {
