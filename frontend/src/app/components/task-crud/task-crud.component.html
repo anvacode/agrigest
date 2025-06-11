@@ -63,8 +63,12 @@
           <td>{{ t.farm?.name }}</td>
           <td>{{ getCultivoNombre(t.cultivo) }}</td>
           <td>
-            <button class="btn-icon" (click)="editTask(t)"><i class="fas fa-edit"></i></button>
-            <button class="btn-icon" (click)="deleteTask(t._id)"><i class="fas fa-trash"></i></button>
+            <button class="btn-icon" (click)="editTask(t)" title="Editar">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon" (click)="deleteTask(t._id)" title="Eliminar">
+              <i class="fas fa-trash"></i>
+            </button>
           </td>
         </tr>
       </tbody>

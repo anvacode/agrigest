@@ -25,6 +25,7 @@ export class CultivoCrudComponent implements OnInit {
   mostrarModalJoin = false;
   marketPrice: any = {};
   loadingMarket: boolean = false;
+  filtro = '';
 
   constructor(
     private cultivoService: CultivoService,
@@ -166,5 +167,15 @@ export class CultivoCrudComponent implements OnInit {
         this.loadingMarket = false;
       }
     });
+  }
+
+  get cultivosFiltrados(): Cultivo[] {
+    if (!this.filtro.trim()) return this.cultivos;
+    const f = this.filtro.trim().toLowerCase();
+    return this.cultivos.filter(c =>
+      (c.nombre && c.nombre.toLowerCase().includes(f)) ||
+      (c.tipo && c.tipo.toLowerCase().includes(f)) ||
+      (c.fechaSiembra && c.fechaSiembra.toString().includes(f))
+    );
   }
 }

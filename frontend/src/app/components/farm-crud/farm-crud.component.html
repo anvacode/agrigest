@@ -53,10 +53,10 @@
           <td>{{ farm.size }}</td>
           <td>{{ farm.crops }}</td>
           <td>
-            <button class="btn-icon" (click)="editFarm(farm)">
+            <button class="btn-icon" (click)="editFarm(farm)" [title]="'Editar ' + farm.name">
               <i class="fas fa-edit"></i>
             </button>
-            <button class="btn-icon" (click)="deleteFarm(farm.id)">
+            <button class="btn-icon" (click)="deleteFarm(farm._id)" [title]="'Eliminar ' + farm.name">
               <i class="fas fa-trash"></i>
             </button>
             <button class="btn-icon" (click)="getWeatherForFarm(farm)" title="Ver clima">

@@ -232,3 +232,8 @@
 .horizontal-nav .nav-item:last-child {
   margin-right: 0;
 }
+
+/* Mueve los estilos inline a la hoja de estilos externa para cumplir con las advertencias de no-inline-styles */
+ul, ol {
+  padding-left: 1.5rem;
+}

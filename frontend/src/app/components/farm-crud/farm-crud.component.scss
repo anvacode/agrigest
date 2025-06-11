@@ -208,6 +208,12 @@
   }  
 }
 
+/* Mueve los estilos inline a la hoja de estilos externa para cumplir con las advertencias de no-inline-styles */
+.crud-table-container .btn-join {
+  margin-bottom: 1rem;
+  text-align: right;
+}
+
 .btn-icon {
   background: none;
   border: none;

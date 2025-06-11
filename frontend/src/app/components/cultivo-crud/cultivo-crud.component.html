@@ -35,7 +35,13 @@
     <div *ngIf="cargando" class="loading-spinner">
       <i class="fas fa-spinner fa-spin"></i> Cargando cultivos...
     </div>
-    <table class="crud-table" *ngIf="!cargando && cultivos.length > 0">
+
+    <!-- Filtro de búsqueda -->
+    <div class="filtro-bar">
+      <input type="text" [(ngModel)]="filtro" placeholder="Buscar por nombre, tipo o fecha..." />
+    </div>
+
+    <table class="crud-table" *ngIf="!cargando && cultivosFiltrados.length > 0">
       <thead>
         <tr>
           <th>#</th>
@@ -46,7 +52,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let cultivo of cultivos; let i = index">
+        <tr *ngFor="let cultivo of cultivosFiltrados; let i = index">
           <td>{{ i + 1 }}</td>
           <td *ngIf="editIndex !== i">{{ cultivo.nombre }}</td>
           <td *ngIf="editIndex === i"><input [(ngModel)]="editCultivo.nombre" placeholder="Nombre" title="Editar nombre" /></td>
