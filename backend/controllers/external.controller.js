@@ -2,12 +2,12 @@
 const axios = require('axios');
 const { getUsdToCopRate } = require('../utils/exchange');
 
-// API Key y endpoint de OpenWeatherMap (puedes cambiar por otra API si tienes preferencia)
-const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'demo'; // Reemplaza 'demo' por tu API key real
+// API Key y endpoint de OpenWeatherMap 
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'demo'; 
 const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 // API de precios de mercado (ejemplo: FAO, o puedes simular)
-const MARKET_API_URL = 'https://api.api-ninjas.com/v1/marketdata'; // Ejemplo, puedes cambiar
+const MARKET_API_URL = 'https://api.api-ninjas.com/v1/marketdata'; 
 const MARKET_API_KEY = process.env.MARKET_API_KEY || 'demo';
 
 // Traducción básica de cultivos comunes ES->EN para la API externa
@@ -22,7 +22,6 @@ const cropTranslations = {
   'cebolla': 'onion',
   'lenteja': 'lentil',
   'zanahoria': 'carrot',
-  // Agrega más si es necesario
 };
 
 // Pronóstico del clima para una finca (por ubicación)

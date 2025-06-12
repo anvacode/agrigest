@@ -6,6 +6,7 @@ import { FarmService } from '../../services/farm.service';
 import { AuthService } from '../../services/auth.service';
 import { AnalyticsComponent } from '../analytics/analytics.component';
 import { TaskService } from '../../services/task.service';
+import { CultivoCrudComponent } from '../cultivo-crud/cultivo-crud.component';
 
 interface Farm {
   _id: string;
@@ -39,7 +40,7 @@ interface UserSummary {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, AnalyticsComponent],
+  imports: [CommonModule, AnalyticsComponent, CultivoCrudComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -176,5 +177,10 @@ export class DashboardComponent implements OnInit {
 
   goToCreateCultivo(): void {
     this.router.navigate(['/cultivos/nuevo']);
+  }
+
+  actualizarDashboard() {
+    this.loadDashboardData();
+    this.loadPendingTasks(); // Opcional, si quieres refrescar tareas pendientes también
   }
 }

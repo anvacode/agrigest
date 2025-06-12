@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-// Configura el transporte de correo (puedes usar Gmail, Outlook, etc.)
+// Configura el transporte de correo 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {

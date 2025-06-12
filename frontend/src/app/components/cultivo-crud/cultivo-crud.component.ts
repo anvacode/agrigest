@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, CommonModule } from '@angular/common';
 import { CultivoService, Cultivo } from '../../services/cultivo.service';
@@ -26,6 +26,8 @@ export class CultivoCrudComponent implements OnInit {
   marketPrice: any = {};
   loadingMarket: boolean = false;
   filtro = '';
+
+  @Output() cultivoCreado = new EventEmitter<void>();
 
   constructor(
     private cultivoService: CultivoService,
@@ -74,6 +76,7 @@ export class CultivoCrudComponent implements OnInit {
         this.cultivo = { nombre: '', tipo: '', fechaSiembra: '', farm: '' };
         this.creando = false;
         this.cargarCultivos();
+        this.cultivoCreado.emit(); // Notifica al padre que hay un nuevo cultivo
       },
       error: (err) => {
         Swal.fire('Error', err.error?.message || 'Error al crear el cultivo', 'error');

@@ -1,10 +1,8 @@
 // backend/utils/exchange.js
 const axios = require('axios');
 
-// Consulta la tasa de cambio USD a COP usando la API de ExchangeRate-API (gratuita)
 async function getUsdToCopRate() {
   try {
-    // Puedes usar otras APIs gratuitas si esta falla (ej: exchangerate.host)
     const res = await axios.get('https://api.exchangerate.host/latest', {
       params: { base: 'USD', symbols: 'COP' }
     });

@@ -1,5 +1,6 @@
 const Farm = require('../models/Farm');
 const User = require('../models/User');
+const Cultivo = require('../models/Cultivo'); // Asegúrate de importar el modelo
 const { HttpError } = require('../utils/errors');
 
 // Obtener estadísticas de cultivos por ubicación
@@ -99,34 +100,34 @@ exports.getFarmsWithOwners = async (req, res, next) => {
 // Análisis de cultivos
 exports.getCropAnalytics = async (req, res, next) => {
   try {
-    const analytics = await Farm.aggregate([
-      // $unwind - Separar arrays de cultivos
+    const analytics = await Cultivo.aggregate([
       {
-        $unwind: '$crops'
-      },
-      // $group - Agrupar por cultivo
-      {
-        $group: {
-          _id: '$crops',
-          count: { $sum: 1 },
-          totalArea: { $sum: '$size' },
-          farms: { $push: { name: '$name', location: '$location' } }
+        $lookup: {
+          from: 'farms',
+          localField: 'farm',
+          foreignField: '_id',
+          as: 'farmData'
         }
       },
-      // $project - Formatear salida
+      { $unwind: '$farmData' },
+      {
+        $group: {
+          _id: '$nombre',
+          count: { $sum: 1 },
+          totalArea: { $sum: '$farmData.size' },
+          farms: { $push: { name: '$farmData.name', location: '$farmData.location' } }
+        }
+      },
       {
         $project: {
           _id: 0,
           crop: '$_id',
           count: 1,
           totalArea: 1,
-          farms: { $slice: ['$farms', 5] } // Limitar a 5 granjas por cultivo
+          farms: { $slice: ['$farms', 5] }
         }
       },
-      // $sort - Ordenar por cantidad
-      {
-        $sort: { count: -1 }
-      }
+      { $sort: { count: -1 } }
     ]);
 
     res.json({ success: true, data: analytics });
@@ -168,4 +169,4 @@ exports.getUserRoleSummary = async (req, res, next) => {
   } catch (error) {
     next(new HttpError(500, 'Error al obtener resumen de usuarios'));
   }
-}; 
+};
